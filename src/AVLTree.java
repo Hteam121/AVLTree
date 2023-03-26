@@ -3,21 +3,7 @@
 
 // data structure that represents a node in the tree
 
-//class Node {
-//    int data; // holds the key
-//    Node parent; // pointer to the parent
-//    Node left; // pointer to left child
-//    Node right; // pointer to right child
-//    int bf; // balance factor of the node
-//
-//    public Node(int data) {
-//        this.data = data;
-//        this.parent = null;
-//        this.left = null;
-//        this.right = null;
-//        this.bf = 0;
-//    }
-//}
+/** changed all the code to support the book object specifically**/
 
 import java.text.DecimalFormat;
 
@@ -26,7 +12,7 @@ class Node {
     Node parent;
     Node left;
     Node right;
-    double key;
+    double key; //Seperated the key from the data object to help with reading code
     int bf;
 
     public Node(Book data) {
@@ -117,10 +103,10 @@ public class AVLTree {
     }
 
     // update the balance factor the node
-    private void updateBalance(Node ogNode, Node node) {
+    private void updateBalance(Node ogNode, Node node) { //Added the ogNode parameter to help with printing insert value
         if (node.bf < -1 || node.bf > 1) {
             DecimalFormat format = new DecimalFormat("0");
-            System.out.print("Imbalance condition occurred at inserting " + format.format(ogNode.key) );
+            System.out.print("Imbalance condition occurred at inserting " + format.format(ogNode.key) ); //This is where I find out what node I'm using
             rebalance(node);
             return;
         }
@@ -149,13 +135,13 @@ public class AVLTree {
             //RL
             if (node.right.bf < 0) {
 
-                System.out.print("; RL case fixed at " + format.format(node.key) + "\n");
+                System.out.print("; RL case fixed at " + format.format(node.key) + "\n"); //RL case along with the problem node
                 rightRotate(node.right);
                 leftRotate(node);
 
                 //LL
             } else {
-                System.out.print("; LL case fixed at " + format.format(node.key) + "\n");
+                System.out.print("; LL case fixed at " + format.format(node.key) + "\n"); //LL case along with the problem node
 
                 leftRotate(node);
             }
@@ -164,14 +150,14 @@ public class AVLTree {
             //LR
             if (node.left.bf > 0) {
 
-                System.out.print("; LR case fixed at " + format.format(node.key) + "\n");
+                System.out.print("; LR case fixed at " + format.format(node.key) + "\n"); //LR case along with the problem node
 
                 leftRotate(node.left);
                 rightRotate(node);
 
                 //RR
             } else {
-                System.out.print("; RR case fixed at " + format.format(node.key) + "\n");
+                System.out.print("; RR case fixed at " + format.format(node.key) + "\n"); //RR case along with the problem node
                 rightRotate(node);
             }
         }
@@ -365,7 +351,11 @@ public class AVLTree {
         printHelper(this.root, "", true);
     }
 
-    /**Test Code**/
+    /**Test Code
+     * Won't work anymore since it is specific to Book
+     * Used this code to test out where insertion, and problem node is detected for problem node
+     * then went back and adjusted for Book
+     * **/
     public static void main(String [] args) {
 //        AVLTree bst = new AVLTree();
 //        bst.insert(1);
