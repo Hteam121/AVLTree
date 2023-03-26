@@ -17,7 +17,7 @@ class Book {
     public String toString() {
         DecimalFormat format = new DecimalFormat("0");
 
-        return String.format("\t %s %s %s\n", format.format(isbn), title, author);
+        return String.format("\t %s %s %s", format.format(isbn), title, author);
     }
 }
 
@@ -36,9 +36,15 @@ public class Runner {
             String author = bookList.nextLine();
 
             Book temp = new Book(isbn, title, author);
-
             books.add(temp);
-            System.out.println(temp.toString());
         }
+
+        AVLTree bst = new AVLTree();
+        for(int i = 0; i < books.size(); i++) {
+            bst.insert(books.get(i));
+        }
+
+        System.out.println();
+        bst.prettyPrint();
     }
 }

@@ -3,15 +3,36 @@
 
 // data structure that represents a node in the tree
 
-class Node {
-    int data; // holds the key
-    Node parent; // pointer to the parent
-    Node left; // pointer to left child
-    Node right; // pointer to right child
-    int bf; // balance factor of the node
+//class Node {
+//    int data; // holds the key
+//    Node parent; // pointer to the parent
+//    Node left; // pointer to left child
+//    Node right; // pointer to right child
+//    int bf; // balance factor of the node
+//
+//    public Node(int data) {
+//        this.data = data;
+//        this.parent = null;
+//        this.left = null;
+//        this.right = null;
+//        this.bf = 0;
+//    }
+//}
 
-    public Node(int data) {
+import java.text.DecimalFormat;
+
+class Node {
+    Book data;
+    Node parent;
+    Node left;
+    Node right;
+    double key;
+    int bf;
+
+    public Node(Book data) {
         this.data = data;
+        this.key = data.isbn;
+
         this.parent = null;
         this.left = null;
         this.right = null;
@@ -38,7 +59,7 @@ public class AVLTree {
                 indent += "|    ";
             }
 
-            System.out.println(currPtr.data + "(BF = " + currPtr.bf + ")");
+            System.out.println(currPtr.data.toString() + "(BF = " + currPtr.bf + ")");
 
             printHelper(currPtr.left, indent, false);
             printHelper(currPtr.right, indent, true);
@@ -46,21 +67,21 @@ public class AVLTree {
     }
 
     private Node searchTreeHelper(Node node, int key) {
-        if (node == null || key == node.data) {
+        if (node == null || key == node.key) {
             return node;
         }
 
-        if (key < node.data) {
+        if (key < node.key) {
             return searchTreeHelper(node.left, key);
         }
         return searchTreeHelper(node.right, key);
     }
 
-    private Node deleteNodeHelper(Node node, int key) {
+    private Node deleteNodeHelper(Node node, double key) {
         // search the key
         if (node == null) return node;
-        else if (key < node.data) node.left = deleteNodeHelper(node.left, key);
-        else if (key > node.data) node.right = deleteNodeHelper(node.right, key);
+        else if (key < node.key) node.left = deleteNodeHelper(node.left, key);
+        else if (key > node.key) node.right = deleteNodeHelper(node.right, key);
         else {
             // the key has been found, now delete it
 
@@ -83,8 +104,8 @@ public class AVLTree {
             // case 3: has both children
             else {
                 Node temp = minimum(node.right);
-                node.data = temp.data;
-                node.right = deleteNodeHelper(node.right, temp.data);
+                node.key = temp.key;
+                node.right = deleteNodeHelper(node.right, temp.key);
             }
 
         }
@@ -98,7 +119,8 @@ public class AVLTree {
     // update the balance factor the node
     private void updateBalance(Node ogNode, Node node) {
         if (node.bf < -1 || node.bf > 1) {
-            System.out.print("Imbalance condition occurred at inserting " + ogNode.data);
+            DecimalFormat format = new DecimalFormat("0");
+            System.out.print("Imbalance condition occurred at inserting " + format.format(ogNode.key) );
             rebalance(node);
             return;
         }
@@ -120,18 +142,20 @@ public class AVLTree {
 
     // rebalance the tree
     void rebalance(Node node) {
+
+        DecimalFormat format = new DecimalFormat("0"); //formats decimal value
         if (node.bf > 0) {
 
             //RL
             if (node.right.bf < 0) {
 
-                System.out.print("; RL case fixed at " + node.data + "\n");
+                System.out.print("; RL case fixed at " + format.format(node.key) + "\n");
                 rightRotate(node.right);
                 leftRotate(node);
 
                 //LL
             } else {
-                System.out.print("; LL case fixed at " + node.data + "\n");
+                System.out.print("; LL case fixed at " + format.format(node.key) + "\n");
 
                 leftRotate(node);
             }
@@ -140,14 +164,14 @@ public class AVLTree {
             //LR
             if (node.left.bf > 0) {
 
-                System.out.print("; LR case fixed at " + node.data + "\n");
+                System.out.print("; LR case fixed at " + format.format(node.key) + "\n");
 
                 leftRotate(node.left);
                 rightRotate(node);
 
                 //RR
             } else {
-                System.out.print("; RR case fixed at " + node.data + "\n");
+                System.out.print("; RR case fixed at " + format.format(node.key) + "\n");
                 rightRotate(node);
             }
         }
@@ -302,15 +326,15 @@ public class AVLTree {
 
 
     // insert the key to the tree in its appropriate position
-    public void insert(int key) {
+    public void insert(Book book) {
         // PART 1: Ordinary BST insert
-        Node node = new Node(key);
+        Node node = new Node(book);
         Node y = null;
         Node x = this.root;
 
         while (x != null) {
             y = x;
-            if (node.data < x.data) {
+            if (node.key < x.key) {
                 x = x.left;
             } else {
                 x = x.right;
@@ -321,7 +345,7 @@ public class AVLTree {
         node.parent = y;
         if (y == null) {
             root = node;
-        } else if (node.data < y.data) {
+        } else if (node.key < y.key) {
             y.left = node;
         } else {
             y.right = node;
@@ -343,15 +367,15 @@ public class AVLTree {
 
     /**Test Code**/
     public static void main(String [] args) {
-        AVLTree bst = new AVLTree();
-        bst.insert(1);
-        bst.insert(2);
-        bst.insert(3);
-        bst.insert(4);
-        bst.insert(5);
-        bst.insert(6);
-        bst.insert(7);
-        bst.insert(8);
-        bst.prettyPrint();
+//        AVLTree bst = new AVLTree();
+//        bst.insert(1);
+//        bst.insert(2);
+//        bst.insert(3);
+//        bst.insert(4);
+//        bst.insert(5);
+//        bst.insert(6);
+//        bst.insert(7);
+//        bst.insert(8);
+//        bst.prettyPrint();
     }
 }
